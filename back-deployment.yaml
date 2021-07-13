@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    service: api 
+  name: back 
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      service: api
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        service: api
+    spec:
+      containers:
+        - image: bshibilov/app312:backv1
+          name: api
+          ports:
+          - containerPort: 3000
+          env:
+          - name: SQLALCHEMY_DATABASE_URI
+            valueFrom:
+              secretKeyRef:
+                name: mysecret
+                key: back-secret
+          resources: {}
+      restartPolicy: Always
+status: {}
